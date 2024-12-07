@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <style>
+        .styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.styled-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+.styled-table th, .styled-table td {
+    padding: 12px 15px;
+}
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+    </style>
+    <div id="dsp-area">T
+        Table Entry
+    </div>
+
+
+    <script>
+        const tbl = document.getElementById('dsp-area');
+        getRecords();
+        async function fetchJSON() {
+            const response = await fetch('readall.php');
+            return response.json();
+        }
+
+        function getRecords() {
+            let html = '<table class="styled-table"><tr><th>User Id </th><th>FirstName </th><th>Last Name </th><th>Age </th><th>Action </th></tr>';
+            fetchJSON().then((data) => {
+                data.forEach(element => {
+                    html += '<tr>';
+                    html += '<td><a target="_blank" href="read.php?id='+element.userid+'">' + element.userid + '</a></td>';
+                    html += '<td>' + element.fname + '</td>';
+                    html += '<td>' + element.lname + '</td>';
+                    html += '<td>' + element.age + '</td>';
+                    html += '<td><a target="_blank" href="formupdate.html?id='+element.userid+'"> Edit </a></td>';
+                    html += '</tr>';
+                });
+                html += '</table>';
+                tbl.innerHTML = html;
+            })
+        }
+    </script>
+</body>
+
+</html>

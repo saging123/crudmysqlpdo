@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="update.php" method="post">
+        <input type="hidden" id="txt-userid" name="userid"/>
+        <label>First Name</label>
+        <input type="text" name="fname" id="txt-fname" placeholder=""/><br/>
+        <label>Last Name</label>
+        <input type="text" name="lname" id="txt-lname" placeholder=""/><br/>
+        <label>Age</label>
+        <input type="number" name="age" id="txt-age" placeholder="12"/><br/>
+        <input type="submit" name="update" value="UPDATE"/>
+    </form>
+    <script>
+        const hiddenUserId = document.getElementById('txt-userid');
+        const inputFname = document.getElementById('txt-fname');
+        const inputLname = document.getElementById('txt-lname');
+        const inputAge = document.getElementById('txt-age');
+        
+        getRecords();
+        async function fetchJSON() {
+            const response = await fetch('read.php?id='+ getParam('id'));
+            return response.json();
+        }
+
+        function getRecords() {
+            fetchJSON().then((data) => {
+                inputAge.value = data.age;
+                inputLname.value = data.lname;
+                inputFname.value = data.fname;
+                hiddenUserId.value = data.userid;
+            })
+        }
+
+        function getParam(id) {
+            const queryString = window.location.search; 
+            const urlParams = new URLSearchParams(queryString);
+           return urlParams.get('id');
+        }
+    </script>
+</body>
+</html>
